@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { clubInfo } from "../mock";
-import FalconCrest from "./FalconCrest";
 
 const navLinks = [
   { label: "Projects", path: "/#projects" },
@@ -13,8 +11,16 @@ const navLinks = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleNav = (path) => {
     setOpen(false);
@@ -34,13 +40,27 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-[#eceae4]">
-      <div className="max-w-[1340px] mx-auto flex justify-between items-center px-5 md:px-10 py-4">
+    <header
+      className={`sticky top-0 z-40 transition-all duration-300 ease-out ${
+        scrolled
+          ? "bg-white/85 backdrop-blur-md shadow-[0_6px_20px_-12px_rgba(20,35,59,0.18)] border-b border-[#eceae4]/80"
+          : "bg-white border-b border-transparent"
+      }`}
+    >
+      <div
+        className={`max-w-[1340px] mx-auto flex justify-between items-center px-5 md:px-10 transition-all duration-300 ease-out ${
+          scrolled ? "py-2" : "py-3 md:py-4"
+        }`}
+      >
         <Link to="/" className="flex items-center min-w-0">
           <img
             src="/rbp_logo_full.png"
             alt="Rotary Bangalore Prime · Create Lasting Impact"
-            className="h-12 sm:h-14 md:h-16 w-auto object-contain"
+            className={`w-auto object-contain transition-all duration-300 ease-out ${
+              scrolled
+                ? "h-10 sm:h-11 md:h-12"
+                : "h-12 sm:h-14 md:h-16"
+            }`}
           />
         </Link>
 
@@ -56,7 +76,9 @@ export default function Header() {
           ))}
           <button
             onClick={() => navigate("/donate")}
-            className="bg-[#d99a1c] hover:bg-[#c08715] text-[#3a2a05] font-extrabold text-[15px] px-5 py-[10px] rounded-[11px] transition-colors"
+            className={`bg-[#d99a1c] hover:bg-[#c08715] text-[#3a2a05] font-extrabold text-[15px] rounded-[11px] transition-all duration-300 ${
+              scrolled ? "px-5 py-[8px]" : "px-5 py-[10px]"
+            }`}
           >
             Donate
           </button>
