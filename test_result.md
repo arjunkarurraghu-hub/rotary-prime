@@ -101,3 +101,91 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Test the new AI chat backend endpoint at POST /api/chat (Server-Sent-Events streaming) and GET /api/chat/history/{session_id}"
+
+backend:
+  - task: "AI Chat Streaming Endpoint (POST /api/chat)"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "Initial test failed - endpoints returned 404. Root cause: app.include_router(api_router) was called at line 75 BEFORE the chat route definitions (lines 113-167), so routes were never registered."
+      - working: true
+        agent: "testing"
+        comment: "Fixed by moving app.include_router(api_router) to after all route definitions. Test passed: POST /api/chat returns 200, content-type text/event-stream, streams delta chunks correctly, ends with done:true signal. Response contains meaningful content about Roti Project (8 lakh rotis, Jayadeva, etc). LLM integration with Anthropic Claude Sonnet 4.5 via emergentintegrations working correctly."
+
+  - task: "AI Chat History Endpoint (GET /api/chat/history/{session_id})"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "Initial test failed - endpoint returned 404 due to router registration issue (same as chat endpoint)."
+      - working: true
+        agent: "testing"
+        comment: "Fixed with router registration fix. Test passed: GET /api/chat/history/test_session_001 returns proper JSON with session_id and messages array. Messages contain correct structure (role, content, ts). Alternating user/assistant pattern verified. Chat history persistence to MongoDB working correctly."
+
+  - task: "AI Chat Empty Message Validation"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Test passed: POST /api/chat with empty message correctly returns 400 status code with error detail 'Empty message'. Validation working as expected."
+
+  - task: "AI Chat Session Continuity"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Test passed: Follow-up question 'How much does ₹500 fund?' correctly answered in context of previous conversation. Session persistence and context handling working correctly."
+
+frontend:
+  - task: "Not tested - backend testing only"
+    implemented: false
+    working: "NA"
+    file: "N/A"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Frontend testing not performed as per testing agent instructions."
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "AI Chat Streaming Endpoint (POST /api/chat)"
+    - "AI Chat History Endpoint (GET /api/chat/history/{session_id})"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "testing"
+    message: "Completed backend testing of AI chat endpoints. Found and fixed critical router registration bug (app.include_router called before route definitions). All 4 test scenarios passed: (1) Streaming chat with Roti Project question, (2) Follow-up question about ₹500 funding, (3) Chat history retrieval, (4) Empty message validation. LLM integration with Anthropic Claude Sonnet 4.5 working correctly. Chat history persistence to MongoDB verified. Ready for main agent to summarize and finish."

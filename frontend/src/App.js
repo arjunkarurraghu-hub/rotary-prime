@@ -8,6 +8,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Donate from "./pages/Donate";
 import Confirmation from "./pages/Confirmation";
 import { Club, Impact, Events } from "./pages/Static";
+import ChatWidget from "./components/ChatWidget";
 
 function Shell({ children }) {
   const location = useLocation();
@@ -17,6 +18,7 @@ function Shell({ children }) {
       {!noChrome && <Header />}
       <main className="flex-1">{children}</main>
       {!noChrome && <Footer />}
+      <ChatWidget />
     </div>
   );
 }
