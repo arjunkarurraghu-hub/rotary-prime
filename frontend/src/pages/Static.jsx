@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar, MapPin, Users, Award } from "lucide-react";
-import { events, clubInfo, stats, impactStories } from "../mock";
+import { events, clubInfo, stats, impactStories, clubMoments } from "../mock";
 import FalconCrest from "../components/FalconCrest";
 
 export function Club() {
@@ -131,6 +131,53 @@ export function Impact() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* CLUB MOMENTS */}
+        <div className="mt-20">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+            <div>
+              <div className="text-[11px] font-bold tracking-[0.08em] uppercase text-[#9a5a1a]">
+                Club Moments
+              </div>
+              <h2 className="text-[24px] md:text-[28px] font-extrabold text-[#15233b] tracking-tight mt-1 leading-tight">
+                Behind the scenes with the Falcons.
+              </h2>
+            </div>
+            <p className="text-[14px] text-[#5c5950] max-w-[420px] leading-relaxed">
+              Ceremonies, partnerships, planning sessions — the everyday moments that make our service work possible.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mt-7">
+            {clubMoments.map((m) => (
+              <div
+                key={m.id}
+                className="group bg-white border border-[#eceae4] rounded-[18px] overflow-hidden hover:shadow-lg hover:-translate-y-[2px] transition-all duration-300"
+              >
+                <div className="aspect-[4/5] overflow-hidden bg-[#ece9e2] relative">
+                  <img
+                    src={m.src}
+                    alt={m.title}
+                    className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="text-[10px] font-bold tracking-wider uppercase text-white bg-black/55 backdrop-blur rounded-full px-2.5 py-1">
+                      {m.tag}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <div className="text-[14px] font-extrabold text-[#15233b] leading-snug">
+                    {m.title}
+                  </div>
+                  <div className="text-[12.5px] text-[#5c5950] mt-1 leading-relaxed">
+                    {m.caption}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

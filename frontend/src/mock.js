@@ -60,12 +60,24 @@ export const projects = [
       "Jayadeva Institute · Satya Sai Sarala Memorial · T. Begur · AiR Homes Bannerghatta.",
     featured: true,
     image:
-      "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/flzn02o6_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%281%29.jpeg",
+      "/roti/roti1_distribution.jpg",
     gallery: [
-      "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/flzn02o6_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%281%29.jpeg",
-      "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/llhqeak5_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%282%29.jpeg",
-      "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/toqtr4nj_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%283%29.jpeg",
-      "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/8h6bo64j_WhatsApp%20Image%202026-06-24%20at%2011.35.53.jpeg"
+      {
+        src: "/roti/roti1_distribution.jpg",
+        caption: "Roti dispatch · Daily distribution rolls out from our partner kitchen"
+      },
+      {
+        src: "/roti/roti2_outreach_left.jpg",
+        caption: "Hospital outreach · Welcome kits & meals at the OPD waiting area"
+      },
+      {
+        src: "/roti/roti3_medical_inst.jpg",
+        caption: "Sri Madhusudan Sai Institute · Serving patients during ward rounds"
+      },
+      {
+        src: "/roti/roti4_air_homes.jpg",
+        caption: "AiR Humanitarian Homes · Inauguration of the Sunday meal service"
+      }
     ],
     details: {
       tagline: "Zero Hunger Initiative · Since July 2019",
@@ -279,6 +291,38 @@ export const impactStories = [
     date: "15 Jun 2026"
   }
 ];
+
+export const clubMoments = [
+  {
+    id: 1,
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/flzn02o6_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%281%29.jpeg",
+    title: "Falcons Installation 2026–27",
+    caption: "Investing our newest officer at the District 3191 Falcons ceremony.",
+    tag: "Ceremony"
+  },
+  {
+    id: 2,
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/llhqeak5_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%282%29.jpeg",
+    title: "Welcoming a new Rotarian",
+    caption: "President Saranya welcomes a new member at our weekly meet.",
+    tag: "Members"
+  },
+  {
+    id: 3,
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/toqtr4nj_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%283%29.jpeg",
+    title: "Sudarshan Group cheque presentation",
+    caption: "A grand CSR partnership for our 2026–27 service portfolio.",
+    tag: "Partners"
+  },
+  {
+    id: 4,
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/8h6bo64j_WhatsApp%20Image%202026-06-24%20at%2011.35.53.jpeg",
+    title: "Board planning huddle",
+    caption: "Mapping the Roti routes and Sanjeevani camp calendar for the year.",
+    tag: "Board"
+  }
+];
+
 
 export const events = [
   { id: 1, title: "District 3191 Installation", date: "12 Jul 2026", time: "7:00 PM", venue: "Chancery Pavillion" },

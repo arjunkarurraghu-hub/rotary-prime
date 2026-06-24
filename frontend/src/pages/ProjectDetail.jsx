@@ -41,7 +41,11 @@ export default function ProjectDetail() {
       ? `₹${(remaining / 100000).toFixed(2)}L`
       : `₹${remaining.toLocaleString("en-IN")}`;
   const details = project.details;
-  const gallery = project.gallery || [project.image];
+  // Normalize gallery: support [{src,caption}] or [string]
+  const rawGallery = project.gallery || [project.image];
+  const gallery = rawGallery.map((g) =>
+    typeof g === "string" ? { src: g, caption: "" } : g
+  );
 
   const showLightbox = (idx) => setLightbox(idx);
   const closeLightbox = () => setLightbox(null);
@@ -182,28 +186,67 @@ export default function ProjectDetail() {
 
           {/* GALLERY */}
           {gallery.length > 0 && (
-            <div className="mt-8">
-              <SectionTitle eyebrow="From the field" title="Roti Project in action" />
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-4 mt-4">
-                {gallery.map((src, i) => (
-                  <button
-                    key={i}
-                    onClick={() => showLightbox(i)}
-                    className={`relative rounded-[16px] overflow-hidden border border-[#eceae4] group bg-[#ece9e2] ${
-                      i === 0 ? "col-span-2" : ""
-                    }`}
-                  >
-                    <img
-                      src={src}
-                      alt={`Roti Project ${i + 1}`}
-                      className={`w-full ${
-                        i === 0 ? "h-[260px] md:h-[420px]" : "h-[180px] md:h-[220px]"
-                      } object-cover group-hover:scale-[1.03] transition-transform duration-500`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </button>
-                ))}
-              </div>
+            <div className="mt-10">
+              <SectionTitle
+                eyebrow="From the field"
+                title="Roti Project in action"
+              />
+              <p className="text-[14px] md:text-[15px] text-[#5c5950] mt-3 max-w-[640px] leading-relaxed">
+                Every photo below is from an actual Roti dispatch or partner site.
+                Click any image to view it full-screen.
+              </p>
+
+              {/* Featured (first image) */}
+              <button
+                onClick={() => showLightbox(0)}
+                className="group relative block w-full mt-5 rounded-[20px] overflow-hidden border border-[#eceae4] bg-[#ece9e2]"
+              >
+                <img
+                  src={gallery[0].src}
+                  alt={gallery[0].caption || "Roti Project"}
+                  className="w-full h-[260px] md:h-[440px] object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7 text-left">
+                  <div className="inline-block text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase text-[#3a2a05] bg-[#d6a72a] rounded-full px-3 py-1">
+                    Featured
+                  </div>
+                  <div className="text-white text-[18px] md:text-[22px] font-extrabold mt-3 leading-snug max-w-[640px]">
+                    {gallery[0].caption || "On the ground with the Roti team"}
+                  </div>
+                </div>
+              </button>
+
+              {/* Remaining images as caption cards */}
+              {gallery.length > 1 && (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                  {gallery.slice(1).map((g, idx) => {
+                    const i = idx + 1;
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => showLightbox(i)}
+                        className="group bg-white border border-[#eceae4] rounded-[16px] overflow-hidden hover:shadow-lg hover:-translate-y-[2px] transition-all duration-300 text-left"
+                      >
+                        <div className="aspect-[4/3] overflow-hidden bg-[#ece9e2]">
+                          <img
+                            src={g.src}
+                            alt={g.caption || `Roti Project ${i + 1}`}
+                            className="w-full h-full object-cover group-hover:scale-[1.06] transition-transform duration-500"
+                          />
+                        </div>
+                        {g.caption && (
+                          <div className="p-4">
+                            <div className="text-[13.5px] text-[#15233b] font-semibold leading-snug">
+                              {g.caption}
+                            </div>
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -474,12 +517,20 @@ export default function ProjectDetail() {
             </>
           )}
           <img
-            src={gallery[lightbox]}
-            alt={`Roti Project ${lightbox + 1}`}
-            className="max-w-full max-h-[85vh] object-contain rounded-lg"
+            src={gallery[lightbox].src}
+            alt={gallery[lightbox].caption || `Roti Project ${lightbox + 1}`}
+            className="max-w-full max-h-[80vh] object-contain rounded-lg"
             onClick={(e) => e.stopPropagation()}
           />
-          <div className="absolute bottom-4 left-0 right-0 text-center text-white/80 text-[13px] font-semibold">
+          {gallery[lightbox].caption && (
+            <div
+              className="absolute bottom-14 left-0 right-0 text-center text-white text-[14px] md:text-[15px] font-semibold px-6 max-w-[800px] mx-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {gallery[lightbox].caption}
+            </div>
+          )}
+          <div className="absolute bottom-4 left-0 right-0 text-center text-white/70 text-[12px] font-semibold">
             {lightbox + 1} / {gallery.length}
           </div>
         </div>
