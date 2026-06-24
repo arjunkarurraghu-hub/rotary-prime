@@ -25,20 +25,20 @@ export default function Home() {
   return (
     <div className="bg-white">
       {/* HERO */}
-      <section className="max-w-[1340px] mx-auto px-5 md:px-10 py-10 md:py-[52px]">
-        <div className="grid lg:grid-cols-[1fr_430px] gap-10 lg:gap-12 items-center">
+      <section className="max-w-[1340px] mx-auto px-5 md:px-10 py-10 md:py-[60px]">
+        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-14 items-center">
           <div>
             <div className="inline-block text-[11px] md:text-[12px] font-bold tracking-[0.08em] uppercase text-[#9a5a1a] bg-[#fbf3df] px-[14px] py-[6px] rounded-full">
               {clubInfo.tagline}
             </div>
-            <h1 className="text-[34px] sm:text-[40px] lg:text-[46px] font-extrabold text-[#15233b] tracking-tight leading-[1.08] mt-5">
+            <h1 className="text-[36px] sm:text-[44px] lg:text-[52px] font-extrabold text-[#15233b] tracking-tight leading-[1.05] mt-5">
               Fund the projects
               <br />
               changing lives across
               <br className="hidden sm:block" />{" "}
               <span className="text-[#17458b]">Bengaluru.</span>
             </h1>
-            <p className="text-[15px] md:text-[17px] text-[#5c5950] leading-[1.6] mt-[18px] max-w-[480px]">
+            <p className="text-[15px] md:text-[17px] text-[#5c5950] leading-[1.6] mt-[18px] max-w-[520px]">
               Every rupee goes straight to a Rotary Bangalore Prime project. Pay
               by UPI, card or net banking — no login needed — and get an 80G
               receipt on WhatsApp instantly.
@@ -67,7 +67,7 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap gap-7 md:gap-10 mt-9 md:mt-[38px]">
               <div>
-                <div className="text-[22px] md:text-[26px] font-extrabold text-[#15233b]">
+                <div className="text-[22px] md:text-[28px] font-extrabold text-[#15233b]">
                   {stats.raisedThisYear}
                 </div>
                 <div className="text-[12px] md:text-[13px] text-[#837f76] font-medium">
@@ -75,7 +75,7 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <div className="text-[22px] md:text-[26px] font-extrabold text-[#15233b]">
+                <div className="text-[22px] md:text-[28px] font-extrabold text-[#15233b]">
                   {stats.activeProjects}
                 </div>
                 <div className="text-[12px] md:text-[13px] text-[#837f76] font-medium">
@@ -83,7 +83,7 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <div className="text-[22px] md:text-[26px] font-extrabold text-[#15233b]">
+                <div className="text-[22px] md:text-[28px] font-extrabold text-[#15233b]">
                   {stats.donors}
                 </div>
                 <div className="text-[12px] md:text-[13px] text-[#837f76] font-medium">
@@ -93,28 +93,69 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CREST CARD */}
-          <div className="order-first lg:order-last w-full max-w-[430px] mx-auto lg:mx-0 bg-[#0e2a52] rounded-[22px] overflow-hidden shadow-[0_18px_44px_-22px_rgba(20,35,59,0.5)] p-7 md:p-[30px] text-center relative">
-            <div className="absolute inset-0 opacity-[0.07] pointer-events-none" style={{ background: "repeating-linear-gradient(135deg, #d6a72a, #d6a72a 1px, transparent 1px, transparent 18px)" }} />
-            <div className="relative">
-              <div className="w-[150px] h-[150px] md:w-[170px] md:h-[170px] mx-auto">
-                <FalconCrest size={170} />
-              </div>
-              <div className="text-[20px] md:text-[22px] font-extrabold text-white mt-[18px] tracking-wider">
-                FALCONS
-              </div>
-              <div className="text-[12px] md:text-[13px] font-bold text-[#d6a72a] tracking-[0.12em] mt-1">
-                AIM HIGH · GO FOR IT
-              </div>
-              <div className="text-[12px] text-[#9fb4d6] mt-[10px]">
-                Rotary District 3191 · 2026–2027
-              </div>
+          {/* FIELD-PHOTO COLLAGE — Roti Project in action */}
+          <div className="order-first lg:order-last w-full">
+            <div className="relative grid grid-cols-5 grid-rows-5 gap-3 md:gap-4 h-[420px] md:h-[520px]">
               <button
-                onClick={() => navigate("/donate")}
-                className="mt-6 w-full bg-[#d99a1c] hover:bg-[#c08715] text-[#3a2a05] font-extrabold text-[15px] py-[13px] rounded-[12px] transition-colors"
+                onClick={() => navigate("/project/food-for-smiles")}
+                className="col-span-3 row-span-3 rounded-[20px] overflow-hidden bg-[#ece9e2] relative group shadow-[0_18px_44px_-22px_rgba(20,35,59,0.45)]"
               >
-                Donate to any project
+                <img
+                  src="/roti/roti1_distribution.jpg"
+                  alt="Roti Project — daily dispatch"
+                  className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                <div className="absolute top-3 left-3">
+                  <span className="text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase text-[#3a2a05] bg-[#d6a72a] rounded-full px-3 py-1">
+                    Featured project
+                  </span>
+                </div>
+                <div className="absolute bottom-3 left-3 right-3 text-left">
+                  <div className="text-white text-[15px] md:text-[18px] font-extrabold leading-snug">
+                    Food for Smiles — Roti Project
+                  </div>
+                  <div className="text-[#e3eaf5] text-[12px] md:text-[13px] mt-1">
+                    8L+ rotis served · Zero Hunger initiative
+                  </div>
+                </div>
               </button>
+
+              <div className="col-span-2 row-span-3 rounded-[20px] overflow-hidden bg-[#ece9e2] relative group">
+                <img
+                  src="/roti/roti3_medical_inst.jpg"
+                  alt="Hospital outreach"
+                  className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                <div className="absolute bottom-3 left-3 right-3 text-white text-[12px] md:text-[13px] font-bold leading-tight">
+                  Sri Madhusudan Sai Institute
+                </div>
+              </div>
+
+              <div className="col-span-2 row-span-2 rounded-[20px] overflow-hidden bg-[#ece9e2] relative group">
+                <img
+                  src="/roti/roti2_outreach_left.jpg"
+                  alt="Hospital outreach"
+                  className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                <div className="absolute bottom-2 left-3 right-3 text-white text-[11px] md:text-[12px] font-bold leading-tight">
+                  Welcome kits at OPD
+                </div>
+              </div>
+
+              <div className="col-span-3 row-span-2 rounded-[20px] overflow-hidden bg-[#ece9e2] relative group">
+                <img
+                  src="/roti/roti4_air_homes.jpg"
+                  alt="AiR Humanitarian Homes"
+                  className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                <div className="absolute bottom-2 left-3 right-3 text-white text-[11px] md:text-[12px] font-bold leading-tight">
+                  AiR Humanitarian Homes inauguration
+                </div>
+              </div>
             </div>
           </div>
         </div>

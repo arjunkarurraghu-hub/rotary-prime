@@ -37,13 +37,17 @@ export default function Header() {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-[#eceae4]">
       <div className="max-w-[1340px] mx-auto flex justify-between items-center px-5 md:px-10 py-4">
         <Link to="/" className="flex items-center gap-3">
-          <FalconCrest size={44} />
-          <div className="leading-tight">
-            <div className="text-[15px] md:text-[17px] font-extrabold text-[#15233b] tracking-tight">
-              {clubInfo.name}
+          <img
+            src="/rbp_logo.png"
+            alt="Rotary Bangalore Prime"
+            className="h-9 sm:h-11 md:h-12 w-auto"
+          />
+          <div className="hidden sm:block leading-tight pl-2 border-l border-[#eceae4]">
+            <div className="text-[11px] md:text-[12px] font-bold text-[#d6a72a] tracking-[0.1em] uppercase">
+              Falcons 2026–27
             </div>
-            <div className="text-[10px] md:text-[11px] font-semibold text-[#9a958a] uppercase tracking-wider">
-              {clubInfo.district} · {clubInfo.team}
+            <div className="text-[10px] md:text-[11px] font-semibold text-[#9a958a] tracking-wider uppercase mt-[2px]">
+              Aim High · Go For It
             </div>
           </div>
         </Link>
