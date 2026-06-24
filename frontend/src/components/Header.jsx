@@ -6,6 +6,7 @@ const navLinks = [
   { label: "Projects", path: "/#projects" },
   { label: "Our Club", path: "/club" },
   { label: "Impact", path: "/impact" },
+  { label: "CSR", path: "/#csr" },
   { label: "Events", path: "/events" }
 ];
 

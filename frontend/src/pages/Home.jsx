@@ -330,6 +330,147 @@ export default function Home() {
         </div>
       </section>
 
+      {/* CSR CONTRIBUTION */}
+      <section id="csr" className="bg-[#0e2a52] relative overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-[0.08] pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle at 85% 15%, #d6a72a 0%, transparent 45%), radial-gradient(circle at 10% 90%, #17458b 0%, transparent 50%)"
+          }}
+        />
+        <div className="max-w-[1340px] mx-auto px-5 md:px-10 py-14 md:py-20 relative">
+          <div className="grid lg:grid-cols-[1.1fr_1fr] gap-10 md:gap-14 items-start">
+            <div>
+              <div className="inline-block text-[11px] font-bold tracking-[0.1em] uppercase text-[#d6a72a] bg-[#d6a72a]/10 border border-[#d6a72a]/30 px-3 py-1 rounded-full">
+                CSR Partnerships
+              </div>
+              <h2 className="text-[28px] md:text-[40px] font-extrabold text-white tracking-tight mt-4 leading-tight">
+                Make your CSR budget create lasting impact.
+              </h2>
+              <p className="text-[15px] md:text-[17px] text-[#a9c2ea] mt-4 leading-relaxed max-w-[560px]">
+                Partner with Rotary Bangalore Prime for measurable, transparent
+                CSR outcomes. Co-brand projects, sponsor entire initiatives, and
+                receive quarterly impact reports with photos, beneficiary
+                counts, and 80G receipts.
+              </p>
+
+              <div className="grid sm:grid-cols-2 gap-3 md:gap-4 mt-8">
+                {[
+                  { t: "80G + CSR eligible", d: "Tax-deductible, Schedule VII compliant" },
+                  { t: "Branded recognition", d: "Co-named projects, on-site signage, press" },
+                  { t: "Audit-ready reports", d: "Beneficiary lists, photos, utilization certificates" },
+                  { t: "Dedicated partner SPOC", d: "A Rotarian point-of-contact for your team" }
+                ].map((b, i) => (
+                  <div
+                    key={i}
+                    className="bg-white/5 border border-white/10 rounded-[14px] p-4 backdrop-blur-sm"
+                  >
+                    <div className="w-7 h-7 rounded-full bg-[#d6a72a] text-[#3a2a05] flex items-center justify-center font-extrabold text-[13px]">
+                      ✓
+                    </div>
+                    <div className="text-white font-extrabold text-[15px] mt-3">
+                      {b.t}
+                    </div>
+                    <div className="text-[#a9c2ea] text-[13px] mt-1 leading-relaxed">
+                      {b.d}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CSR Tier card */}
+            <div className="bg-white rounded-[24px] p-6 md:p-8 shadow-[0_24px_60px_-22px_rgba(0,0,0,0.5)]">
+              <div className="text-[11px] font-bold tracking-[0.1em] uppercase text-[#9a5a1a]">
+                CSR contribution tiers
+              </div>
+              <h3 className="text-[22px] md:text-[26px] font-extrabold text-[#15233b] tracking-tight mt-1">
+                Pick a sponsorship level
+              </h3>
+
+              <div className="mt-5 space-y-3">
+                {[
+                  {
+                    label: "Patron",
+                    amount: 100000,
+                    perks: "Logo on website · Quarterly impact report",
+                    chip: "₹1 Lakh",
+                    accent: "#17458b"
+                  },
+                  {
+                    label: "Sustaining Partner",
+                    amount: 500000,
+                    perks: "Co-named sub-project · Site visit · Annual recognition",
+                    chip: "₹5 Lakh",
+                    accent: "#9a5a1a"
+                  },
+                  {
+                    label: "Flagship Sponsor",
+                    amount: 1800000,
+                    perks: "Full-year Roti Project naming rights · Media features",
+                    chip: "₹18 Lakh",
+                    accent: "#1f8b57",
+                    featured: true
+                  }
+                ].map((t, i) => (
+                  <button
+                    key={i}
+                    onClick={() =>
+                      navigate(
+                        `/donate?project=food-for-smiles&amount=${t.amount}`
+                      )
+                    }
+                    className={`w-full text-left bg-white border rounded-[16px] p-4 md:p-5 flex items-start gap-4 transition-all hover:-translate-y-[1px] hover:shadow-md ${
+                      t.featured
+                        ? "border-[#d99a1c] bg-[#fbf3df]"
+                        : "border-[#eceae4] hover:border-[#15233b]"
+                    }`}
+                  >
+                    <div
+                      className="px-3 py-2 rounded-[10px] text-white font-extrabold text-[15px] min-w-[80px] text-center flex-shrink-0"
+                      style={{ background: t.accent }}
+                    >
+                      {t.chip}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[15px] font-extrabold text-[#15233b]">
+                        {t.label}
+                      </div>
+                      <div className="text-[12.5px] text-[#5c5950] mt-1 leading-relaxed">
+                        {t.perks}
+                      </div>
+                    </div>
+                    {t.featured && (
+                      <span className="text-[10px] font-bold tracking-wider uppercase bg-[#d99a1c] text-[#3a2a05] rounded-full px-2 py-1 flex-shrink-0">
+                        Best
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() =>
+                  window.open(
+                    `https://wa.me/919800000000?text=${encodeURIComponent(
+                      "Hi Rotary Bangalore Prime — I'd like to discuss a CSR partnership."
+                    )}`,
+                    "_blank"
+                  )
+                }
+                className="mt-5 w-full bg-[#17458b] hover:bg-[#0e2a52] text-white font-extrabold text-[14px] py-[14px] rounded-[14px]"
+              >
+                Talk to our CSR team on WhatsApp
+              </button>
+              <div className="text-center text-[11px] text-[#9a958a] mt-2">
+                Custom amounts welcome · Section 80G eligible
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="bg-[#17458b] relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.06] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 20% 30%, #d6a72a 0%, transparent 40%)" }} />

@@ -17,14 +17,14 @@ export function Club() {
         <p className="text-[16px] md:text-[17px] text-[#5c5950] mt-5 max-w-[680px] leading-relaxed">
           Rotary Bangalore Prime is a service club of business and professional
           leaders. Our 2026–27 team — the Falcons — carries the motto
-          <span className="font-bold text-[#15233b]"> "Aim High, Go For It"</span>{" "}
+          <span className="font-bold text-[#15233b]"> "Create Lasting Impact"</span>{" "}
           into every project, fundraiser and community moment.
         </p>
 
         <div className="grid sm:grid-cols-3 gap-4 mt-10">
           {[
-            { icon: Users, label: "Members", value: "86" },
-            { icon: Award, label: "Years strong", value: "24" },
+            { icon: Users, label: "Members", value: "50" },
+            { icon: Award, label: "Years strong", value: "7" },
             { icon: MapPin, label: "Meeting", value: "Chancery Pavillion" }
           ].map((s, i) => (
             <div
@@ -43,15 +43,23 @@ export function Club() {
         </div>
 
         <div className="mt-12 grid lg:grid-cols-2 gap-8 items-center">
-          <div className="bg-[#0e2a52] rounded-[24px] p-10 text-center">
-            <div className="w-[170px] h-[170px] mx-auto">
-              <FalconCrest size={170} />
-            </div>
-            <div className="text-[24px] font-extrabold text-white mt-5 tracking-wider">
-              FALCONS
-            </div>
-            <div className="text-[13px] font-bold text-[#d6a72a] tracking-[0.12em] mt-1">
-              AIM HIGH · GO FOR IT
+          <div className="bg-gradient-to-br from-[#0e2a52] to-[#071a35] rounded-[24px] p-6 md:p-10 text-center relative overflow-hidden">
+            <div
+              className="absolute inset-0 opacity-[0.08] pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 30%, #d6a72a 0%, transparent 55%)"
+              }}
+            />
+            <div className="relative">
+              <img
+                src="/brand/falcons_crest.jpg"
+                alt="Falcons crest — Rotary District 3191"
+                className="w-full max-w-[360px] mx-auto rounded-[18px] shadow-[0_18px_40px_-18px_rgba(0,0,0,0.5)]"
+              />
+              <div className="text-[13px] font-bold text-[#d6a72a] tracking-[0.18em] mt-5">
+                ROTARY DISTRICT 3191 · 2026–2027
+              </div>
             </div>
           </div>
           <div>

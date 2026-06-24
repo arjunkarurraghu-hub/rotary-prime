@@ -273,14 +273,14 @@ export const impactStories = [
     id: 1,
     title: "3,200 meals served in June",
     project: "Food for Smiles",
-    image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&q=80",
+    image: "/roti/roti1_distribution.jpg",
     date: "30 Jun 2026"
   },
   {
     id: 2,
     title: "Eye screening for 420 students",
     project: "Sanjeevani Health Camp",
-    image: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80",
     date: "22 Jun 2026"
   },
   {
