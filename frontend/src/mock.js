@@ -178,25 +178,35 @@ export const projects = [
   },
   {
     id: "literacy",
-    title: "Literacy Kits & Scholarships",
-    subtitle: "Smart classrooms \u00b7 Shoes to children",
+    title: "KAUSHAL — Skill Development",
+    subtitle: "Tally · GST · MS Office · Soft skills training",
     category: "education",
-    categoryLabel: "Education",
-    icon: "\ud83d\udcda",
+    categoryLabel: "Skill Development",
+    icon: "\ud83c\udf93",
     iconBg: "#fbf0d8",
     status: "ACTIVE",
     statusColor: "#1f8b57",
     statusBg: "#e7f6ee",
-    raised: 54000,
-    goal: 100000,
+    raised: 540000,
+    goal: 2500000,
     donors: 21,
-    progress: 54,
-    raisedLabel: "\u20b954,000",
-    goalLabel: "\u20b91L",
-    description: "Literacy kits, scholarships and smart classroom upgrades for government schools. Includes shoes and uniforms for children who need them most.",
-    impactLine: "\ud83d\udcd8 \u20b92,500 equips one child for a full year.",
-    location: "12 partner government schools.",
-    image: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=1200&q=80"
+    progress: 22,
+    raisedLabel: "\u20b95.4L",
+    goalLabel: "\u20b925L",
+    description: "KAUSHAL is our flagship skilling programme — Tally, GST, MS Office and Soft Skills training for students from low-income backgrounds. Over the last 5 years it has enabled 1,000+ students across partner colleges in Bengaluru, helping them become job-ready.",
+    impactLine: "\ud83c\udf93 \u20b92,500 sponsors one full course completion for a student.",
+    location: "APS College of Commerce · Rani Sarala Devi College of Commerce · partner government colleges across Bengaluru.",
+    image: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/vq74b52d_Screenshot%202026-06-25%20at%2012.52.47%E2%80%AFPM.png",
+    gallery: [
+      {
+        src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/vq74b52d_Screenshot%202026-06-25%20at%2012.52.47%E2%80%AFPM.png",
+        caption: "KAUSHAL — Inaugural Session at APS College of Commerce, 2025"
+      },
+      {
+        src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/9swyaktu_Screenshot%202026-06-25%20at%2012.52.57%E2%80%AFPM.png",
+        caption: "Inaugural Session at Rani Sarala Devi College, 2020 · PP Rtn Radha B G presenting course completion certificates, 2023"
+      }
+    ]
   },
   {
     id: "drinking-water",
