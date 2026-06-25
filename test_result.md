@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the new AI chat backend endpoint at POST /api/chat (Server-Sent-Events streaming) and GET /api/chat/history/{session_id}"
+user_problem_statement: "Test the new AI chat backend endpoint at POST /api/chat (Server-Sent-Events streaming) and GET /api/chat/history/{session_id}. Test the new donations endpoints: POST /api/donations, GET /api/projects/{project_id}/stats, GET /api/projects/stats, GET /api/donations/recent"
 
 backend:
   - task: "AI Chat Streaming Endpoint (POST /api/chat)"
@@ -159,6 +159,78 @@ backend:
         agent: "testing"
         comment: "Test passed: Follow-up question 'How much does ₹500 fund?' correctly answered in context of previous conversation. Session persistence and context handling working correctly."
 
+  - task: "Create Donation Endpoint (POST /api/donations)"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Test passed: POST /api/donations with sanjeevani project (amount=2500) returned 200 with proper Donation object containing id, project_id, amount, name='Test Donor', ref_number='SANJEE-773A62', created_at. Ref number format validated correctly."
+
+  - task: "Create Anonymous Donation"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Test passed: POST /api/donations with food-for-smiles project (amount=50000, name='', anonymous=true) returned 200. Name correctly set to 'Anonymous' as expected."
+
+  - task: "Donation Amount Validation"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Test passed: POST /api/donations with amount=0 correctly returned 400 status code with error detail 'Amount must be at least ₹1'. Validation working as expected."
+
+  - task: "Project Stats Endpoint (GET /api/projects/{project_id}/stats)"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Test passed: GET /api/projects/sanjeevani/stats returned 200 with correct structure {project_id: 'sanjeevani', raised_platform: 2500, donors_platform: 1}. MongoDB aggregation working correctly."
+
+  - task: "All Projects Stats Endpoint (GET /api/projects/stats)"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Test passed: GET /api/projects/stats returned 200 with aggregate stats for both sanjeevani and food-for-smiles projects. Response structure validated: {stats: {sanjeevani: {...}, food-for-smiles: {...}}}."
+
+  - task: "Recent Donations Endpoint with Privacy Filters (GET /api/donations/recent)"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Test passed: GET /api/donations/recent?limit=5 returned 200 with items array containing 2 donations sorted by created_at desc. Privacy filters verified: 'phone' and 'raw_name' fields correctly excluded from response. Limit parameter working correctly."
+
 frontend:
   - task: "Not tested - backend testing only"
     implemented: false
@@ -175,13 +247,15 @@ frontend:
 metadata:
   created_by: "testing_agent"
   version: "1.0"
-  test_sequence: 1
+  test_sequence: 2
   run_ui: false
 
 test_plan:
   current_focus:
-    - "AI Chat Streaming Endpoint (POST /api/chat)"
-    - "AI Chat History Endpoint (GET /api/chat/history/{session_id})"
+    - "Create Donation Endpoint (POST /api/donations)"
+    - "Project Stats Endpoint (GET /api/projects/{project_id}/stats)"
+    - "All Projects Stats Endpoint (GET /api/projects/stats)"
+    - "Recent Donations Endpoint with Privacy Filters (GET /api/donations/recent)"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -189,3 +263,5 @@ test_plan:
 agent_communication:
   - agent: "testing"
     message: "Completed backend testing of AI chat endpoints. Found and fixed critical router registration bug (app.include_router called before route definitions). All 4 test scenarios passed: (1) Streaming chat with Roti Project question, (2) Follow-up question about ₹500 funding, (3) Chat history retrieval, (4) Empty message validation. LLM integration with Anthropic Claude Sonnet 4.5 working correctly. Chat history persistence to MongoDB verified. Ready for main agent to summarize and finish."
+  - agent: "testing"
+    message: "Completed backend testing of donations endpoints. All 6 test scenarios passed successfully: (1) POST /api/donations for sanjeevani project with amount=2500 - returned proper Donation object with ref_number format SANJEE-XXXXXX, (2) POST /api/donations for food-for-smiles with anonymous=true - name correctly set to 'Anonymous', (3) POST /api/donations with amount=0 - correctly returned 400 error, (4) GET /api/projects/sanjeevani/stats - returned raised_platform=2500 and donors_platform=1, (5) GET /api/projects/stats - returned aggregate stats for both projects, (6) GET /api/donations/recent?limit=5 - returned items sorted by created_at desc with phone and raw_name fields correctly filtered out for privacy. All donation endpoints working correctly with proper MongoDB persistence and aggregation. Ready for main agent to summarize and finish."

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -13,14 +13,34 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
+import axios from "axios";
 import { projects, recentDonors, clubInfo } from "../mock";
-import FalconCrest from "../components/FalconCrest";
+import AutoCarousel from "../components/AutoCarousel";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function ProjectDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const project = projects.find((p) => p.id === id);
   const [lightbox, setLightbox] = useState(null);
+  const [liveStats, setLiveStats] = useState(null);
+
+  useEffect(() => {
+    if (!project) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await axios.get(`${API}/projects/${project.id}/stats`);
+        if (!cancelled) setLiveStats(res.data);
+      } catch {
+        /* ignore — fallback to base mock */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [project]);
 
   if (!project) {
     return (
@@ -35,11 +55,23 @@ export default function ProjectDetail() {
     );
   }
 
-  const remaining = project.goal - project.raised;
-  const remainingLabel =
-    remaining >= 100000
-      ? `₹${(remaining / 100000).toFixed(2)}L`
-      : `₹${remaining.toLocaleString("en-IN")}`;
+  // Merge live platform donations with base mock numbers
+  const liveRaised = (liveStats?.raised_platform || 0) + project.raised;
+  const liveDonors = (liveStats?.donors_platform || 0) + project.donors;
+  const liveProgress = Math.min(
+    100,
+    Math.round((liveRaised / project.goal) * 100)
+  );
+
+  const fmtMoney = (n) => {
+    if (n >= 100000) return `₹${(n / 100000).toFixed(n % 100000 === 0 ? 0 : 2)}L`;
+    if (n >= 1000) return `₹${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K`;
+    return `₹${n.toLocaleString("en-IN")}`;
+  };
+
+  const remaining = Math.max(0, project.goal - liveRaised);
+  const remainingLabel = fmtMoney(remaining);
+  const liveRaisedLabel = fmtMoney(liveRaised);
   const details = project.details;
   // Normalize gallery: support [{src,caption}] or [string]
   const rawGallery = project.gallery || [project.image];
@@ -56,55 +88,47 @@ export default function ProjectDetail() {
 
   return (
     <div className="bg-[#f7f6f2] min-h-screen">
-      {/* HEADER BANNER */}
-      <div className="bg-[#17458b] text-white relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.08] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle at 80% 20%, #d6a72a 0%, transparent 40%)"
-          }}
-        />
-        <div className="max-w-[1100px] mx-auto px-5 md:px-10 pt-6 pb-12 md:pt-8 md:pb-16 relative">
+      {/* HEADER BANNER — minimal */}
+      <div className="bg-[#17458b] text-white">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-5 md:py-6">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-[#a9c2ea] hover:text-white text-[14px] font-semibold transition-colors"
+            className="flex items-center gap-2 text-[#a9c2ea] hover:text-white text-[13px] font-semibold transition-colors"
           >
-            <ArrowLeft size={18} /> Back
+            <ArrowLeft size={16} /> Back
           </button>
-          <div className="flex items-center gap-3 mt-6">
-            <FalconCrest size={36} />
-            <span className="text-[11px] md:text-[12px] font-bold tracking-[0.08em] uppercase text-[#a9c2ea]">
-              {project.categoryLabel} · Bangalore Prime
+          <div className="flex items-center gap-3 mt-3 flex-wrap">
+            <span className="text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase text-[#d6a72a]">
+              {project.categoryLabel}
             </span>
             {details?.tagline && (
-              <span className="hidden sm:inline-flex text-[11px] md:text-[12px] font-bold tracking-wider uppercase text-[#3a2a05] bg-[#d6a72a] rounded-full px-3 py-1 ml-2">
+              <span className="text-[10px] md:text-[11px] font-bold tracking-wider uppercase text-[#3a2a05] bg-[#d6a72a] rounded-full px-2.5 py-[3px]">
                 {details.tagline}
               </span>
             )}
           </div>
-          <h1 className="text-[28px] md:text-[44px] font-extrabold tracking-tight mt-4 leading-tight">
+          <h1 className="text-[22px] md:text-[32px] font-extrabold tracking-tight mt-2 leading-tight">
             {project.title}
           </h1>
-          <p className="text-[14px] md:text-[17px] text-[#c8d8ef] mt-2 max-w-[760px] leading-relaxed">
+          <p className="text-[13px] md:text-[14px] text-[#c8d8ef] mt-1.5 max-w-[760px] leading-relaxed">
             {project.location}
           </p>
         </div>
       </div>
 
-      {/* STATS CARD */}
-      <div className="max-w-[1100px] mx-auto px-5 md:px-10 -mt-8 md:-mt-10">
-        <div className="bg-white border border-[#eceae4] rounded-[18px] shadow-[0_8px_22px_-16px_rgba(20,35,59,0.3)] grid grid-cols-3">
+      {/* STATS CARD — sits naturally below header */}
+      <div className="max-w-[1100px] mx-auto px-5 md:px-10 mt-6 md:mt-7">
+        <div className="bg-white border border-[#eceae4] rounded-[18px] shadow-[0_8px_22px_-16px_rgba(20,35,59,0.18)] grid grid-cols-3">
           <div className="text-center p-4 md:p-5">
-            <div className="text-[18px] md:text-[24px] font-extrabold text-[#17458b]">
-              {project.raisedLabel}
+            <div className="text-[18px] md:text-[24px] font-extrabold text-[#17458b] tabular-nums">
+              {liveRaisedLabel}
             </div>
             <div className="text-[11px] md:text-[12px] text-[#837f76] mt-1">
               Raised
             </div>
           </div>
           <div className="text-center p-4 md:p-5 border-l border-r border-[#f0eee8]">
-            <div className="text-[18px] md:text-[24px] font-extrabold text-[#15233b]">
+            <div className="text-[18px] md:text-[24px] font-extrabold text-[#15233b] tabular-nums">
               {project.goalLabel}
             </div>
             <div className="text-[11px] md:text-[12px] text-[#837f76] mt-1">
@@ -112,8 +136,8 @@ export default function ProjectDetail() {
             </div>
           </div>
           <div className="text-center p-4 md:p-5">
-            <div className="text-[18px] md:text-[24px] font-extrabold text-[#15233b]">
-              {project.donors}
+            <div className="text-[18px] md:text-[24px] font-extrabold text-[#15233b] tabular-nums">
+              {liveDonors}
             </div>
             <div className="text-[11px] md:text-[12px] text-[#837f76] mt-1">
               Donors
@@ -126,13 +150,13 @@ export default function ProjectDetail() {
       <div className="max-w-[1100px] mx-auto px-5 md:px-10 py-8 md:py-12 grid lg:grid-cols-[1fr_360px] gap-8 md:gap-10">
         <div className="min-w-0">
           <div className="flex justify-between text-[13px] font-bold">
-            <span className="text-[#17458b]">{project.progress}% funded</span>
+            <span className="text-[#17458b]">{liveProgress}% funded</span>
             <span className="text-[#837f76]">{remainingLabel} to go</span>
           </div>
           <div className="h-[10px] bg-[#ece9e2] rounded-full mt-2 overflow-hidden">
             <div
               className="h-full bg-[#d99a1c] rounded-full transition-all duration-700"
-              style={{ width: `${project.progress}%` }}
+              style={{ width: `${liveProgress}%` }}
             />
           </div>
 
@@ -185,66 +209,82 @@ export default function ProjectDetail() {
           )}
 
           {/* GALLERY */}
-          {gallery.length > 0 && (
+          {gallery.length > 0 && gallery[0].src && (
             <div className="mt-10">
               <SectionTitle
                 eyebrow="From the field"
-                title="Roti Project in action"
+                title={
+                  details
+                    ? `${project.title.split("—")[0].trim()} in action`
+                    : `${project.title} — moments from the field`
+                }
               />
               <p className="text-[14px] md:text-[15px] text-[#5c5950] mt-3 max-w-[640px] leading-relaxed">
-                Every photo below is from an actual Roti dispatch or partner site.
+                Every photo here is from an actual {project.categoryLabel.toLowerCase()} session.
                 Click any image to view it full-screen.
               </p>
 
-              {/* Featured (first image) */}
-              <button
-                onClick={() => showLightbox(0)}
-                className="group relative block w-full mt-5 rounded-[20px] overflow-hidden border border-[#eceae4] bg-[#ece9e2]"
-              >
-                <img
-                  src={gallery[0].src}
-                  alt={gallery[0].caption || "Roti Project"}
-                  className="w-full h-[260px] md:h-[440px] object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7 text-left">
-                  <div className="inline-block text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase text-[#3a2a05] bg-[#d6a72a] rounded-full px-3 py-1">
-                    Featured
-                  </div>
-                  <div className="text-white text-[18px] md:text-[22px] font-extrabold mt-3 leading-snug max-w-[640px]">
-                    {gallery[0].caption || "On the ground with the Roti team"}
-                  </div>
-                </div>
-              </button>
-
-              {/* Remaining images as caption cards */}
-              {gallery.length > 1 && (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                  {gallery.slice(1).map((g, idx) => {
-                    const i = idx + 1;
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => showLightbox(i)}
-                        className="group bg-white border border-[#eceae4] rounded-[16px] overflow-hidden hover:shadow-lg hover:-translate-y-[2px] transition-all duration-300 text-left"
-                      >
-                        <div className="aspect-[4/3] overflow-hidden bg-[#ece9e2]">
-                          <img
-                            src={g.src}
-                            alt={g.caption || `Roti Project ${i + 1}`}
-                            className="w-full h-full object-cover group-hover:scale-[1.06] transition-transform duration-500"
-                          />
-                        </div>
-                        {g.caption && (
-                          <div className="p-4">
-                            <div className="text-[13.5px] text-[#15233b] font-semibold leading-snug">
-                              {g.caption}
+              {details ? (
+                /* RICH gallery layout (used by Roti Project) */
+                <>
+                  <button
+                    onClick={() => showLightbox(0)}
+                    className="group relative block w-full mt-5 rounded-[20px] overflow-hidden border border-[#eceae4] bg-[#ece9e2]"
+                  >
+                    <img
+                      src={gallery[0].src}
+                      alt={gallery[0].caption || project.title}
+                      className="w-full h-[260px] md:h-[440px] object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7 text-left">
+                      <div className="inline-block text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase text-[#3a2a05] bg-[#d6a72a] rounded-full px-3 py-1">
+                        Featured
+                      </div>
+                      <div className="text-white text-[18px] md:text-[22px] font-extrabold mt-3 leading-snug max-w-[640px]">
+                        {gallery[0].caption || "On the ground with the team"}
+                      </div>
+                    </div>
+                  </button>
+                  {gallery.length > 1 && (
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                      {gallery.slice(1).map((g, idx) => {
+                        const i = idx + 1;
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => showLightbox(i)}
+                            className="group bg-white border border-[#eceae4] rounded-[16px] overflow-hidden hover:shadow-lg hover:-translate-y-[2px] transition-all duration-300 text-left"
+                          >
+                            <div className="aspect-[4/3] overflow-hidden bg-[#ece9e2]">
+                              <img
+                                src={g.src}
+                                alt={g.caption || `${project.title} ${i + 1}`}
+                                className="w-full h-full object-cover group-hover:scale-[1.06] transition-transform duration-500"
+                              />
                             </div>
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
+                            {g.caption && (
+                              <div className="p-4">
+                                <div className="text-[13.5px] text-[#15233b] font-semibold leading-snug">
+                                  {g.caption}
+                                </div>
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
+              ) : (
+                /* AUTO CAROUSEL — used by simpler projects like Sanjeevani */
+                <div className="mt-5">
+                  <AutoCarousel
+                    slides={gallery}
+                    interval={4500}
+                    aspect="16/10"
+                    onSlideClick={(i) => showLightbox(i)}
+                  />
                 </div>
               )}
             </div>

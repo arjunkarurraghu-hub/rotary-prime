@@ -164,6 +164,131 @@ async def chat_history(session_id: str):
     return {"session_id": session_id, "messages": messages}
 
 
+# ============ DONATIONS ============
+
+class DonationCreate(BaseModel):
+    project_id: str
+    amount: int
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    anonymous: bool = False
+    frequency: str = "one-time"  # or "monthly"
+    whatsapp_receipt: bool = True
+    mode: str = "UPI"
+
+
+class Donation(BaseModel):
+    id: str
+    project_id: str
+    amount: int
+    name: str
+    anonymous: bool
+    frequency: str
+    mode: str
+    ref_number: str
+    created_at: str
+
+
+def _make_ref(project_id: str) -> str:
+    prefix = project_id.upper().replace("-", "")[:6]
+    return f"{prefix}-{uuid.uuid4().hex[:6].upper()}"
+
+
+@api_router.post("/donations", response_model=Donation)
+async def create_donation(payload: DonationCreate):
+    if payload.amount < 1:
+        raise HTTPException(status_code=400, detail="Amount must be at least ₹1")
+    if not payload.project_id:
+        raise HTTPException(status_code=400, detail="project_id is required")
+
+    display_name = "Anonymous" if payload.anonymous else (payload.name or "Friend").strip() or "Friend"
+    doc = {
+        "id": str(uuid.uuid4()),
+        "project_id": payload.project_id,
+        "amount": int(payload.amount),
+        "name": display_name,
+        "raw_name": (payload.name or "").strip(),
+        "phone": (payload.phone or "").strip(),
+        "anonymous": bool(payload.anonymous),
+        "frequency": payload.frequency,
+        "mode": payload.mode,
+        "whatsapp_receipt": payload.whatsapp_receipt,
+        "ref_number": _make_ref(payload.project_id),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.donations.insert_one(doc)
+    doc.pop("_id", None)
+    return Donation(
+        id=doc["id"],
+        project_id=doc["project_id"],
+        amount=doc["amount"],
+        name=doc["name"],
+        anonymous=doc["anonymous"],
+        frequency=doc["frequency"],
+        mode=doc["mode"],
+        ref_number=doc["ref_number"],
+        created_at=doc["created_at"],
+    )
+
+
+@api_router.get("/projects/{project_id}/stats")
+async def project_stats(project_id: str):
+    """Aggregate live donation stats for a project."""
+    pipeline = [
+        {"$match": {"project_id": project_id}},
+        {
+            "$group": {
+                "_id": "$project_id",
+                "raised": {"$sum": "$amount"},
+                "donors": {"$sum": 1},
+            }
+        },
+    ]
+    agg = await db.donations.aggregate(pipeline).to_list(1)
+    if agg:
+        return {
+            "project_id": project_id,
+            "raised_platform": int(agg[0]["raised"]),
+            "donors_platform": int(agg[0]["donors"]),
+        }
+    return {"project_id": project_id, "raised_platform": 0, "donors_platform": 0}
+
+
+@api_router.get("/projects/stats")
+async def all_project_stats():
+    """Aggregate live donation stats for all projects."""
+    pipeline = [
+        {
+            "$group": {
+                "_id": "$project_id",
+                "raised": {"$sum": "$amount"},
+                "donors": {"$sum": 1},
+            }
+        },
+    ]
+    agg = await db.donations.aggregate(pipeline).to_list(100)
+    return {
+        "stats": {
+            doc["_id"]: {
+                "raised_platform": int(doc["raised"]),
+                "donors_platform": int(doc["donors"]),
+            }
+            for doc in agg
+        }
+    }
+
+
+@api_router.get("/donations/recent")
+async def recent_donations(limit: int = 8):
+    items = (
+        await db.donations.find({}, {"_id": 0, "phone": 0, "raw_name": 0})
+        .sort("created_at", -1)
+        .limit(limit)
+        .to_list(limit)
+    )
+    return {"items": items}
+
+
 # Include the router in the main app (must be after all route definitions)
 app.include_router(api_router)
 

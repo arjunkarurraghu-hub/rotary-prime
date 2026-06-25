@@ -1,7 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Check, Shield, Smartphone } from "lucide-react";
+import axios from "axios";
 import { projects, presetAmounts, impactByAmount } from "../mock";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function Donate() {
   const [params] = useSearchParams();
@@ -17,6 +20,7 @@ export default function Donate() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [anonymous, setAnonymous] = useState(false);
+  const [paying, setPaying] = useState(false);
 
   const activeAmount = useMemo(() => {
     if (custom) {
@@ -40,16 +44,41 @@ export default function Donate() {
     setCustom("");
   };
 
-  const handlePay = () => {
+  const handlePay = async () => {
     if (activeAmount < 100) {
       alert("Please enter at least ₹100");
       return;
     }
-    navigate(
-      `/confirmation?project=${project.id}&amount=${activeAmount}&name=${
-        encodeURIComponent(anonymous ? "Anonymous" : name || "Friend")
-      }&wa=${whatsappReceipt ? 1 : 0}&freq=${frequency}`
-    );
+    if (paying) return;
+    setPaying(true);
+    let refNumber = "";
+    try {
+      const res = await axios.post(`${API}/donations`, {
+        project_id: project.id,
+        amount: activeAmount,
+        name: name || "Friend",
+        phone,
+        anonymous,
+        frequency,
+        whatsapp_receipt: whatsappReceipt,
+        mode: "UPI"
+      });
+      refNumber = res.data?.ref_number || "";
+    } catch (e) {
+      // Even if recording fails, continue to confirmation page so the donor
+      // still gets a receipt (graceful degradation).
+      console.error("Failed to record donation", e);
+    }
+    const displayName = anonymous ? "Anonymous" : name || "Friend";
+    const qs = new URLSearchParams({
+      project: project.id,
+      amount: String(activeAmount),
+      name: displayName,
+      wa: whatsappReceipt ? "1" : "0",
+      freq: frequency
+    });
+    if (refNumber) qs.set("ref", refNumber);
+    navigate(`/confirmation?${qs.toString()}`);
   };
 
   return (
@@ -214,10 +243,14 @@ export default function Donate() {
         <div className="max-w-[760px] mx-auto">
           <button
             onClick={handlePay}
-            className="w-full bg-[#d99a1c] hover:bg-[#c08715] text-[#3a2a05] font-extrabold text-[16px] md:text-[17px] py-[17px] rounded-[16px] transition-colors"
+            disabled={paying}
+            className="w-full bg-[#d99a1c] hover:bg-[#c08715] disabled:opacity-60 text-[#3a2a05] font-extrabold text-[16px] md:text-[17px] py-[17px] rounded-[16px] transition-colors"
           >
-            Pay ₹{activeAmount.toLocaleString("en-IN")}{" "}
-            {frequency === "monthly" ? "/ month" : ""} with UPI
+            {paying
+              ? "Processing…"
+              : `Pay ₹${activeAmount.toLocaleString("en-IN")} ${
+                  frequency === "monthly" ? "/ month" : ""
+                } with UPI`}
           </button>
         </div>
       </div>

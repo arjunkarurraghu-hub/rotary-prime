@@ -139,7 +139,7 @@ export const projects = [
   {
     id: "sanjeevani",
     title: "Sanjeevani Health Care Camps",
-    subtitle: "Blood \u00b7 Eye \u00b7 Diabetes \u00b7 ENT \u00b7 Dental",
+    subtitle: "Blood · Eye · Diabetes · ENT · Dental",
     category: "health",
     categoryLabel: "Health",
     icon: "\ud83d\udc8a",
@@ -153,10 +153,28 @@ export const projects = [
     progress: 68,
     raisedLabel: "\u20b968,500",
     goalLabel: "\u20b91L",
-    description: "Free multi-specialty health camps for underserved communities across Bengaluru. Blood donation, eye screening, diabetes, ENT and dental check-ups by qualified doctors.",
-    impactLine: "\ud83e\ude7a \u20b91,000 screens one full family.",
-    location: "Mobile camps across 12 Bengaluru wards.",
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80"
+    description: "Free multi-specialty health camps for underserved communities across Bengaluru. Blood donation, eye screening, diabetes, ENT and dental check-ups by qualified doctors — held at hospitals, homes for the destitute, and partner community halls.",
+    impactLine: "\ud83e\ude7a \u20b91,000 screens one full family at a Sanjeevani camp.",
+    location: "Mobile camps across 12 Bengaluru wards · AiR Humanitarian Homes · partner colleges.",
+    image: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/805hvyae_WhatsApp%20Image%202026-06-25%20at%2011.43.26.jpeg",
+    gallery: [
+      {
+        src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/805hvyae_WhatsApp%20Image%202026-06-25%20at%2011.43.26.jpeg",
+        caption: "Patient intake & screening · AiR Humanitarian Homes camp"
+      },
+      {
+        src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/16bczy3o_WhatsApp%20Image%202026-06-25%20at%2011.43.28.jpeg",
+        caption: "Beneficiaries waiting their turn at the mega camp"
+      },
+      {
+        src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/51ma3f07_WhatsApp%20Image%202026-06-25%20at%2011.43.27.jpeg",
+        caption: "Dental specialists examining patients at a partner college"
+      },
+      {
+        src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/o2cravw3_WhatsApp%20Image%202026-06-25%20at%2011.43.28%20%281%29.jpeg",
+        caption: "Free dental cleaning by qualified doctors on-site"
+      }
+    ]
   },
   {
     id: "literacy",

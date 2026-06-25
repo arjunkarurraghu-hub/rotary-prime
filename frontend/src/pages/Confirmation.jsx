@@ -24,13 +24,15 @@ export default function Confirmation() {
   const wa = params.get("wa") === "1";
   const project = projects.find((p) => p.id === projectId) || projects[0];
 
-  // Use a stable ref number across renders
+  // Use a stable ref number across renders; prefer backend-provided ref
+  const refFromUrl = params.get("ref");
   const refNumber = useMemo(
     () =>
+      refFromUrl ||
       `${project.id.toUpperCase().replace(/-/g, "").slice(0, 6)}-${Math.floor(
         100000 + Math.random() * 900000
       )}`,
-    [project.id]
+    [project.id, refFromUrl]
   );
 
   const today = new Date();
