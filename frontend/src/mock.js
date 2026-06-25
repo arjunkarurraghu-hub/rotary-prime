@@ -313,31 +313,38 @@ export const impactStories = [
 export const clubMoments = [
   {
     id: 1,
-    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/flzn02o6_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%281%29.jpeg",
-    title: "Falcons Installation 2026–27",
-    caption: "Investing our newest officer at the District 3191 Falcons ceremony.",
-    tag: "Ceremony"
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/wrevucr4_Screenshot%202026-06-25%20at%2012.52.20%E2%80%AFPM.png",
+    title: "Installation of President — RY 2024-25",
+    caption: "Actor / Director Dr. Ramesh Aravind addressing during Installation.",
+    tag: "Installation"
   },
   {
     id: 2,
-    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/llhqeak5_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%282%29.jpeg",
-    title: "Welcoming a new Rotarian",
-    caption: "President Saranya welcomes a new member at our weekly meet.",
-    tag: "Members"
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/itv65j80_Screenshot%202026-06-25%20at%2012.52.34%E2%80%AFPM.png",
+    title: "Empowering Future Minds",
+    caption: "Honouring Padma Shri Dr. M K Shridhar · 289 educational kits distributed to Rani Sarala Devi students.",
+    tag: "Education"
   },
   {
     id: 3,
-    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/toqtr4nj_WhatsApp%20Image%202026-06-24%20at%2011.35.52%20%283%29.jpeg",
-    title: "Sudarshan Group cheque presentation",
-    caption: "A grand CSR partnership for our 2026–27 service portfolio.",
-    tag: "Partners"
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/vq74b52d_Screenshot%202026-06-25%20at%2012.52.47%E2%80%AFPM.png",
+    title: "KAUSHAL — Skilling Future Generation",
+    caption: "Tally / GST / MS Office / Soft Skills training · 1000 students enabled in 5 years · ₹25 lakh project cost. Inaugural session at APS College of Commerce, 2025.",
+    tag: "Skilling"
   },
   {
     id: 4,
-    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/8h6bo64j_WhatsApp%20Image%202026-06-24%20at%2011.35.53.jpeg",
-    title: "Board planning huddle",
-    caption: "Mapping the Roti routes and Sanjeevani camp calendar for the year.",
-    tag: "Board"
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/9swyaktu_Screenshot%202026-06-25%20at%2012.52.57%E2%80%AFPM.png",
+    title: "KAUSHAL at Rani Sarala Devi College",
+    caption: "Inaugural Session at Rani Sarala Devi College of Commerce, 2020 · PP Rtn Radha B G presenting course completion certificates, 2023.",
+    tag: "Skilling"
+  },
+  {
+    id: 5,
+    src: "https://customer-assets.emergentagent.com/job_prime-interface/artifacts/8gmrgkw3_Screenshot%202026-06-25%20at%2012.56.24%E2%80%AFPM.png",
+    title: "Preventive Blindness",
+    caption: "Inauguration of Eye Camp by IPS B. Dayananda, Commissioner of Police, Bangalore — police personnel and family members screened at CAR South, Adugodi.",
+    tag: "Health"
   }
 ];
 

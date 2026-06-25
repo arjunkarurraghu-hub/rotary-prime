@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar, MapPin, Users, Award } from "lucide-react";
 import { events, clubInfo, stats, impactStories, clubMoments } from "../mock";
@@ -84,6 +84,7 @@ export function Club() {
 }
 
 export function Impact() {
+  const [lightboxIdx, setLightboxIdx] = useState(null);
   return (
     <div className="bg-white">
       <section className="max-w-[1100px] mx-auto px-5 md:px-10 py-12 md:py-16">
@@ -153,41 +154,117 @@ export function Impact() {
               </h2>
             </div>
             <p className="text-[14px] text-[#5c5950] max-w-[420px] leading-relaxed">
-              Ceremonies, partnerships, planning sessions — the everyday moments that make our service work possible.
+              Installations, partnerships, skilling drives and screening
+              camps — milestones that bring our service to life.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mt-7">
+          <div className="grid sm:grid-cols-2 gap-5 md:gap-6 mt-7">
             {clubMoments.map((m) => (
-              <div
+              <button
                 key={m.id}
-                className="group bg-white border border-[#eceae4] rounded-[18px] overflow-hidden hover:shadow-lg hover:-translate-y-[2px] transition-all duration-300"
+                onClick={() => setLightboxIdx(clubMoments.indexOf(m))}
+                className="group bg-white border border-[#eceae4] rounded-[20px] overflow-hidden hover:shadow-xl hover:-translate-y-[2px] transition-all duration-300 text-left"
               >
-                <div className="aspect-[4/5] overflow-hidden bg-[#ece9e2] relative">
+                <div className="aspect-square overflow-hidden bg-[#ece9e2] relative">
                   <img
                     src={m.src}
                     alt={m.title}
-                    className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                    loading="lazy"
                   />
                   <div className="absolute top-3 left-3">
                     <span className="text-[10px] font-bold tracking-wider uppercase text-white bg-black/55 backdrop-blur rounded-full px-2.5 py-1">
                       {m.tag}
                     </span>
                   </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-4">
+                    <span className="text-[11px] font-bold tracking-wider uppercase text-white bg-white/15 backdrop-blur-sm border border-white/30 rounded-full px-3 py-1">
+                      View full
+                    </span>
+                  </div>
                 </div>
-                <div className="p-4">
-                  <div className="text-[14px] font-extrabold text-[#15233b] leading-snug">
+                <div className="p-5">
+                  <div className="text-[15px] md:text-[16px] font-extrabold text-[#15233b] leading-snug">
                     {m.title}
                   </div>
-                  <div className="text-[12.5px] text-[#5c5950] mt-1 leading-relaxed">
+                  <div className="text-[13px] text-[#5c5950] mt-1.5 leading-relaxed">
                     {m.caption}
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
       </section>
+
+      {/* LIGHTBOX */}
+      {lightboxIdx !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setLightboxIdx(null)}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setLightboxIdx(null);
+            }}
+            className="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-2xl leading-none"
+            aria-label="Close"
+          >
+            ×
+          </button>
+          {clubMoments.length > 1 && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIdx((i) =>
+                    i === 0 ? clubMoments.length - 1 : i - 1
+                  );
+                }}
+                className="absolute left-3 md:left-6 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-2xl leading-none"
+                aria-label="Previous"
+              >
+                ‹
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIdx((i) =>
+                    i === clubMoments.length - 1 ? 0 : i + 1
+                  );
+                }}
+                className="absolute right-3 md:right-6 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-2xl leading-none"
+                aria-label="Next"
+              >
+                ›
+              </button>
+            </>
+          )}
+          <div
+            className="max-w-[1100px] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={clubMoments[lightboxIdx].src}
+              alt={clubMoments[lightboxIdx].title}
+              className="w-full max-h-[78vh] object-contain rounded-lg"
+            />
+            <div className="mt-4 text-center text-white px-4">
+              <div className="text-[16px] md:text-[18px] font-extrabold">
+                {clubMoments[lightboxIdx].title}
+              </div>
+              <div className="text-[13px] text-white/75 mt-1">
+                {clubMoments[lightboxIdx].caption}
+              </div>
+              <div className="text-[11px] text-white/55 mt-2">
+                {lightboxIdx + 1} / {clubMoments.length}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
